@@ -6,7 +6,7 @@ labels: security, needs-triage
 assignees: 'remedy-security-team'
 ---
 
-## ⚠️ ВАЖНО: Security Issues
+##  ВАЖНО: Security Issues
 
 **НЕ создавайте публичные issues для security проблем!**
 

@@ -6,7 +6,7 @@
 
 ---
 
-## 📋 Содержание
+##  Содержание
 
 1. [Общие принципы](#общие-принципы)
 2. [Требования безопасности](#требования-безопасности)
@@ -21,7 +21,7 @@
 
 ---
 
-## 🎯 Общие принципы
+##  Общие принципы
 
 ### Критичность системы
 Remedy обрабатывает финансовые транзакции между регулируемыми компаниями. Каждая строка кода должна соответствовать стандартам:
@@ -39,17 +39,17 @@ Remedy обрабатывает финансовые транзакции меж
 
 ---
 
-## 🔒 Требования безопасности
+##  Требования безопасности
 
 ### 1. Управление секретами
 
-#### ❌ ЗАПРЕЩЕНО
+####  ЗАПРЕЩЕНО
 - Хранить секреты в коде или в git-репозитории
 - Коммитить `.env` файлы с реальными ключами
 - Использовать hardcoded пароли, API ключи, приватные ключи
 - Передавать секреты через URL параметры или логи
 
-#### ✅ ОБЯЗАТЕЛЬНО
+####  ОБЯЗАТЕЛЬНО
 - Использовать AWS Secrets Manager / Parameter Store для production
 - Использовать переменные окружения для локальной разработки (`.env.example` без реальных значений)
 - Ротация секретов каждые 90 дней
@@ -57,13 +57,13 @@ Remedy обрабатывает финансовые транзакции меж
 - Шифрование секретов в покое и при передаче (TLS 1.3+)
 
 ```typescript
-// ✅ Правильно
+//  Правильно
 const apiKey = process.env.API_KEY;
 if (!apiKey) {
   throw new Error('API_KEY environment variable is required');
 }
 
-// ❌ Неправильно
+//  Неправильно
 const apiKey = 'sk_live_1234567890abcdef';
 ```
 
@@ -78,7 +78,7 @@ const apiKey = 'sk_live_1234567890abcdef';
 - Все критические операции требуют MFA (Multi-Factor Authentication)
 
 ```typescript
-// ✅ Правильно: проверка прав доступа
+//  Правильно: проверка прав доступа
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles('admin', 'compliance_officer')
 @Post('/travel-rule/submit')
@@ -97,7 +97,7 @@ async submitTravelRule(@Body() data: TravelRuleDTO) {
 - Защита от SQL injection, XSS, CSRF
 
 ```typescript
-// ✅ Правильно: использование class-validator
+//  Правильно: использование class-validator
 export class TravelRuleDTO {
   @IsString()
   @IsNotEmpty()
@@ -138,7 +138,7 @@ export class TravelRuleDTO {
 
 ---
 
-## 💻 Стандарты кодирования
+##  Стандарты кодирования
 
 ### 1. TypeScript / NestJS
 
@@ -150,7 +150,7 @@ export class TravelRuleDTO {
 - Использовать async/await вместо Promises.then()
 
 ```typescript
-// ✅ Правильно
+//  Правильно
 async function processTransaction(
   transactionId: string
 ): Promise<TransactionResult> {
@@ -161,7 +161,7 @@ async function processTransaction(
   return this.process(transaction);
 }
 
-// ❌ Неправильно
+//  Неправильно
 function processTransaction(transactionId: any) {
   return this.transactionRepository.findById(transactionId).then(t => {
     return this.process(t);
@@ -178,7 +178,7 @@ function processTransaction(transactionId: any) {
 - Использовать error codes для категоризации
 
 ```typescript
-// ✅ Правильно
+//  Правильно
 try {
   await this.validateTravelRule(data);
 } catch (error) {
@@ -201,7 +201,7 @@ try {
 - Использовать Winston или Pino для production
 
 ```typescript
-// ✅ Правильно
+//  Правильно
 this.logger.info('Transaction initiated', {
   transactionId: transaction.id,
   amount: transaction.amount,
@@ -221,7 +221,7 @@ this.logger.info('Transaction initiated', {
 - Регулярные бэкапы (минимум ежедневно)
 
 ```typescript
-// ✅ Правильно: использование транзакций
+//  Правильно: использование транзакций
 async transferFunds(from: string, to: string, amount: number) {
   return await this.dataSource.transaction(async (manager) => {
     await manager.decrement(Account, { id: from }, 'balance', amount);
@@ -233,7 +233,7 @@ async transferFunds(from: string, to: string, amount: number) {
 
 ---
 
-## 📜 Compliance и регуляторные требования
+##  Compliance и регуляторные требования
 
 ### 1. Travel Rule (IVMS-101)
 
@@ -277,7 +277,7 @@ async transferFunds(from: string, to: string, amount: number) {
 - Все API запросы и ответы
 
 ```typescript
-// ✅ Правильно: audit logging
+//  Правильно: audit logging
 async createTransaction(data: CreateTransactionDTO, user: User) {
   const transaction = await this.transactionService.create(data);
   
@@ -299,7 +299,7 @@ async createTransaction(data: CreateTransactionDTO, user: User) {
 
 ---
 
-## 🧪 Тестирование
+##  Тестирование
 
 ### 1. Типы тестов
 
@@ -326,7 +326,7 @@ async createTransaction(data: CreateTransactionDTO, user: User) {
 ### 2. Требования к тестам
 
 ```typescript
-// ✅ Правильно: comprehensive test
+//  Правильно: comprehensive test
 describe('TravelRuleService', () => {
   it('should validate and encrypt travel rule data', async () => {
     const data = createMockTravelRuleData();
@@ -353,7 +353,7 @@ describe('TravelRuleService', () => {
 
 ---
 
-## 📚 Документация
+##  Документация
 
 ### 1. Код документация
 
@@ -403,7 +403,7 @@ async submit(data: TravelRuleDTO, userId: string): Promise<TravelRuleRecord> {
 
 ---
 
-## 👥 Code Review
+##  Code Review
 
 ### 1. Обязательные проверки
 
@@ -459,7 +459,7 @@ async submit(data: TravelRuleDTO, userId: string): Promise<TravelRuleRecord> {
 
 ---
 
-## 🌿 Git Workflow
+##  Git Workflow
 
 ### 1. Branch Strategy
 
@@ -511,7 +511,7 @@ Closes #123
 
 ---
 
-## 📊 Мониторинг и логирование
+##  Мониторинг и логирование
 
 ### 1. Мониторинг
 
@@ -555,7 +555,7 @@ Closes #123
 
 ---
 
-## 🚨 Инцидент-менеджмент
+##  Инцидент-менеджмент
 
 ### 1. Классификация инцидентов
 
@@ -597,7 +597,7 @@ Closes #123
 
 ---
 
-## ✅ Чеклист для разработчиков
+##  Чеклист для разработчиков
 
 ### Перед началом работы
 - [ ] Прочитан и понят CODE_GUIDE
@@ -624,7 +624,7 @@ Closes #123
 
 ---
 
-## 📞 Контакты
+##  Контакты
 
 - **Security Issues**: security@remedy.finance
 - **Compliance Questions**: compliance@remedy.finance

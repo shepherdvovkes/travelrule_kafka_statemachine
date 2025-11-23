@@ -11,12 +11,12 @@
 **Branch name pattern**: `main`
 
 #### Обязательные настройки:
-- ✅ **Require a pull request before merging**
+-  **Require a pull request before merging**
   - Require approvals: **2**
   - Dismiss stale pull request approvals when new commits are pushed
   - Require review from Code Owners
   
-- ✅ **Require status checks to pass before merging**
+-  **Require status checks to pass before merging**
   - Required status checks:
     - `security-scan`
     - `lint`
@@ -27,33 +27,33 @@
     - `CodeQL / Analyze (typescript)`
   - Require branches to be up to date before merging
   
-- ✅ **Require conversation resolution before merging**
+-  **Require conversation resolution before merging**
   
-- ✅ **Require signed commits** (рекомендуется)
+-  **Require signed commits** (рекомендуется)
   
-- ✅ **Require linear history** (рекомендуется)
+-  **Require linear history** (рекомендуется)
   
-- ✅ **Do not allow bypassing the above settings**
+-  **Do not allow bypassing the above settings**
   - Even administrators cannot bypass
   
-- ✅ **Restrict who can push to matching branches**
+-  **Restrict who can push to matching branches**
   - Only specific teams/individuals
 
 #### Дополнительные настройки:
-- ✅ **Lock branch** (после релиза, временно)
-- ✅ **Allow force pushes**: ❌ НЕТ
-- ✅ **Allow deletions**: ❌ НЕТ
+-  **Lock branch** (после релиза, временно)
+-  **Allow force pushes**:  НЕТ
+-  **Allow deletions**:  НЕТ
 
 ### 2. Develop Branch Protection
 
 **Branch name pattern**: `develop`
 
 #### Обязательные настройки:
-- ✅ **Require a pull request before merging**
+-  **Require a pull request before merging**
   - Require approvals: **1**
   - Dismiss stale pull request approvals when new commits are pushed
   
-- ✅ **Require status checks to pass before merging**
+-  **Require status checks to pass before merging**
   - Required status checks:
     - `security-scan`
     - `lint`
@@ -62,24 +62,24 @@
     - `compliance-check`
   - Require branches to be up to date before merging
   
-- ✅ **Require conversation resolution before merging**
+-  **Require conversation resolution before merging**
   
-- ✅ **Do not allow bypassing the above settings**
+-  **Do not allow bypassing the above settings**
   - Even administrators cannot bypass
 
 #### Дополнительные настройки:
-- ✅ **Allow force pushes**: ❌ НЕТ
-- ✅ **Allow deletions**: ❌ НЕТ
+-  **Allow force pushes**:  НЕТ
+-  **Allow deletions**:  НЕТ
 
 ### 3. Feature/Fix Branch Protection (опционально)
 
 **Branch name pattern**: `feature/*`, `fix/*`, `security/*`, `compliance/*`
 
 #### Рекомендуемые настройки:
-- ✅ **Require a pull request before merging**
+-  **Require a pull request before merging**
   - Require approvals: **1**
   
-- ✅ **Require status checks to pass before merging**
+-  **Require status checks to pass before merging**
   - Required status checks:
     - `lint`
     - `test`

@@ -2,11 +2,11 @@
 
 > **Remedy** — инфраструктурный финтех-продукт, создающий "SWIFT для стейблкоинов"
 
-## 📋 Описание
+##  Описание
 
 Remedy — это API-сеть для банков и криптофинкомпаний, позволяющая безболезненно подключаться друг к другу и пересылать стейблкоины с соблюдением всех регуляторных требований (Travel Rule, AML/KYC), независимо от блокчейна или токена.
 
-## 🏗️ Архитектура
+##  Архитектура
 
 - **Backend**: NestJS + TypeScript
 - **Database**: PostgreSQL 15+
@@ -14,7 +14,7 @@ Remedy — это API-сеть для банков и криптофинкомп
 - **MPC Wallets**: Defens.com
 - **Cross-chain**: Circle CCTP (планируется)
 
-## 🚀 Быстрый старт
+##  Быстрый старт
 
 ### Предварительные требования
 
@@ -49,14 +49,14 @@ npm run start:dev
 
 Подробная инструкция по настройке: [.github/SETUP.md](.github/SETUP.md)
 
-## 📚 Документация
+##  Документация
 
 - **[CODE_GUIDE.md](CODE_GUIDE.md)** - Полное руководство по стандартам кода для финтех систем
 - **[.github/SETUP.md](.github/SETUP.md)** - Настройка development окружения
 - **[.github/BRANCH_PROTECTION.md](.github/BRANCH_PROTECTION.md)** - Правила защиты веток
 - **[.github/PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md)** - Шаблон Pull Request
 
-## 🧪 Тестирование
+##  Тестирование
 
 ```bash
 # Все тесты
@@ -77,19 +77,19 @@ npm run test:cov
 
 **Требование**: Минимум 80% покрытия тестами для всех модулей.
 
-## 🔒 Безопасность
+##  Безопасность
 
 Remedy следует строгим стандартам безопасности для финтех систем:
 
-- ✅ SAST (Static Application Security Testing) в CI/CD
-- ✅ Dependency scanning (npm audit, Snyk, Dependabot)
-- ✅ Secret scanning (Gitleaks)
-- ✅ CodeQL analysis
-- ✅ Security reviews для всех изменений
+-  SAST (Static Application Security Testing) в CI/CD
+-  Dependency scanning (npm audit, Snyk, Dependabot)
+-  Secret scanning (Gitleaks)
+-  CodeQL analysis
+-  Security reviews для всех изменений
 
 **Сообщить о проблеме безопасности**: security@remedy.finance
 
-## 📜 Compliance
+##  Compliance
 
 Remedy соответствует следующим регуляторным требованиям:
 
@@ -98,7 +98,7 @@ Remedy соответствует следующим регуляторным т
 - **GDPR**: Защита персональных данных
 - **Audit Trail**: Полное логирование всех операций
 
-## 🛠️ Разработка
+##  Разработка
 
 ### Code Style
 
@@ -132,32 +132,32 @@ npm run type-check
 ### Pre-commit Hooks
 
 Автоматически проверяются перед каждым коммитом:
-- ✅ Линтинг (ESLint)
-- ✅ Форматирование (Prettier)
-- ✅ Типы (TypeScript)
-- ✅ Тесты (Unit)
-- ✅ Секреты (Gitleaks)
+-  Линтинг (ESLint)
+-  Форматирование (Prettier)
+-  Типы (TypeScript)
+-  Тесты (Unit)
+-  Секреты (Gitleaks)
 
-## 📦 Структура проекта
+##  Структура проекта
 
 ```
 remedy-backend/
-├── src/
-│   ├── travel-rule/      # Travel Rule (IVMS-101) модуль
-│   ├── aml/              # AML/KYC модуль
-│   ├── payment/          # Payment processing
-│   ├── transaction/      # Transaction management
-│   ├── address-book/     # Address Book / RemiTags
-│   ├── policy-engine/    # Policy Engine
-│   ├── security/         # Security utilities
-│   └── common/           # Общие утилиты
-├── test/                 # Тесты
-├── migrations/           # Database migrations
-├── .github/              # GitHub workflows и templates
-└── docs/                 # Документация
+ src/
+    travel-rule/      # Travel Rule (IVMS-101) модуль
+    aml/              # AML/KYC модуль
+    payment/          # Payment processing
+    transaction/      # Transaction management
+    address-book/     # Address Book / RemiTags
+    policy-engine/    # Policy Engine
+    security/         # Security utilities
+    common/           # Общие утилиты
+ test/                 # Тесты
+ migrations/           # Database migrations
+ .github/              # GitHub workflows и templates
+ docs/                 # Документация
 ```
 
-## 🔄 CI/CD
+##  CI/CD
 
 GitHub Actions автоматически выполняет:
 
@@ -188,13 +188,13 @@ GitHub Actions автоматически выполняет:
    - Security scan (Trivy)
    - Deployment to staging/production
 
-## 📞 Контакты
+##  Контакты
 
 - **Security Issues**: security@remedy.finance
 - **Compliance Questions**: compliance@remedy.finance
 - **Technical Questions**: tech@remedy.finance
 
-## 📄 Лицензия
+##  Лицензия
 
 Proprietary - Все права защищены
 

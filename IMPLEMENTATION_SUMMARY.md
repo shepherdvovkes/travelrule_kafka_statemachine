@@ -1,8 +1,8 @@
 # Сводка реализации Code Guide и CI/CD для Remedy
 
-## ✅ Созданные файлы
+##  Созданные файлы
 
-### 📚 Документация
+###  Документация
 
 1. **CODE_GUIDE.md** - Comprehensive code guide для финтех систем
    - Общие принципы разработки
@@ -33,7 +33,7 @@
 
 5. **.github/workflows/README.md** - Документация по workflows
 
-### 🔄 GitHub Actions CI/CD
+###  GitHub Actions CI/CD
 
 1. **.github/workflows/ci-cd.yml** - Основной CI/CD pipeline
    - Security scanning (Gitleaks, npm audit, Semgrep, CodeQL)
@@ -52,7 +52,7 @@
    - Статический анализ безопасности
    - Еженедельное сканирование
 
-### 📝 Templates
+###  Templates
 
 1. **.github/PULL_REQUEST_TEMPLATE.md** - Шаблон Pull Request
    - Security checklist
@@ -72,7 +72,7 @@
    - Compliance impact оценка
    - Security impact оценка
 
-### ⚙️ Конфигурационные файлы
+###  Конфигурационные файлы
 
 1. **.eslintrc.js** - ESLint конфигурация
    - TypeScript strict rules
@@ -102,7 +102,7 @@
    - Compliance-critical files → compliance team
    - Payment/Transaction files → senior engineers
 
-### 🔧 Development Tools
+###  Development Tools
 
 1. **.husky/pre-commit** - Pre-commit hook
    - ESLint проверка
@@ -123,38 +123,38 @@
    - Strict mode включен
    - Все security checks
 
-## 🎯 Ключевые особенности
+##  Ключевые особенности
 
 ### Безопасность
-- ✅ SAST (Static Application Security Testing)
-- ✅ Dependency vulnerability scanning
-- ✅ Secret scanning (Gitleaks)
-- ✅ CodeQL analysis
-- ✅ Security rules в ESLint
-- ✅ Pre-commit hooks для проверки секретов
+-  SAST (Static Application Security Testing)
+-  Dependency vulnerability scanning
+-  Secret scanning (Gitleaks)
+-  CodeQL analysis
+-  Security rules в ESLint
+-  Pre-commit hooks для проверки секретов
 
 ### Compliance
-- ✅ Travel Rule (IVMS-101) проверки
-- ✅ AML/KYC requirements
-- ✅ GDPR compliance
-- ✅ Audit trail verification
-- ✅ PII logging checks
+-  Travel Rule (IVMS-101) проверки
+-  AML/KYC requirements
+-  GDPR compliance
+-  Audit trail verification
+-  PII logging checks
 
 ### Качество кода
-- ✅ Строгий TypeScript (strict mode)
-- ✅ ESLint с security и quality rules
-- ✅ Prettier для единообразия
-- ✅ Минимум 80% test coverage
-- ✅ Code review requirements
+-  Строгий TypeScript (strict mode)
+-  ESLint с security и quality rules
+-  Prettier для единообразия
+-  Минимум 80% test coverage
+-  Code review requirements
 
 ### CI/CD
-- ✅ Автоматические проверки на каждый PR
-- ✅ Branch protection rules
-- ✅ Manual approval для production
-- ✅ Comprehensive testing pipeline
-- ✅ Security scanning на каждом этапе
+-  Автоматические проверки на каждый PR
+-  Branch protection rules
+-  Manual approval для production
+-  Comprehensive testing pipeline
+-  Security scanning на каждом этапе
 
-## 📋 Следующие шаги
+##  Следующие шаги
 
 ### 1. Настройка GitHub
 
@@ -230,7 +230,7 @@
 3. **Проверьте, что pre-commit hooks работают**
    - Они должны автоматически запуститься
 
-## 🔍 Проверка работы
+##  Проверка работы
 
 ### Локально
 
@@ -258,7 +258,7 @@ gitleaks detect --source . --no-banner
 3. Убедитесь, что все checks проходят
 4. Проверьте, что branch protection работает
 
-## 📊 Метрики качества
+##  Метрики качества
 
 После настройки вы сможете отслеживать:
 
@@ -268,7 +268,7 @@ gitleaks detect --source . --no-banner
 - **Dependency Vulnerabilities**: через Dependabot alerts
 - **Compliance**: через compliance-check job в CI
 
-## 🚨 Важные замечания
+##  Важные замечания
 
 1. **Секреты**: Никогда не коммитьте реальные секреты. Используйте `.env.example` для примеров.
 
@@ -280,7 +280,7 @@ gitleaks detect --source . --no-banner
 
 5. **Production Deployments**: Требуют manual approval от минимум 2 team members.
 
-## 📞 Поддержка
+##  Поддержка
 
 Если возникнут вопросы:
 
@@ -292,5 +292,5 @@ gitleaks detect --source . --no-banner
 
 **Создано**: Ноябрь 2025  
 **Версия**: 1.0  
-**Статус**: ✅ Готово к использованию
+**Статус**:  Готово к использованию
 
