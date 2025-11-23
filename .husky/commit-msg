@@ -1,0 +1,45 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Commit message format validation
+# Format: <type>(<scope>): <subject>
+#
+# Types: feat, fix, security, compliance, refactor, test, docs, chore
+# Scope: optional, e.g., travel-rule, payment, auth
+
+commit_msg=$(cat "$1")
+
+# Check commit message format
+if ! echo "$commit_msg" | grep -qE '^(feat|fix|security|compliance|refactor|test|docs|chore)(\(.+\))?: .+'; then
+  echo "❌ Invalid commit message format!"
+  echo ""
+  echo "Commit message must follow the format:"
+  echo "  <type>(<scope>): <subject>"
+  echo ""
+  echo "Types: feat, fix, security, compliance, refactor, test, docs, chore"
+  echo "Scope: optional (e.g., travel-rule, payment, auth)"
+  echo ""
+  echo "Examples:"
+  echo "  feat(travel-rule): add IVMS-101 validation"
+  echo "  fix(payment): resolve transaction timeout issue"
+  echo "  security(auth): fix JWT token expiration"
+  echo "  compliance(aml): update sanctions screening"
+  echo ""
+  exit 1
+fi
+
+# Check minimum subject length
+subject=$(echo "$commit_msg" | sed -E 's/^[^:]+: (.+)/\1/' | head -n1)
+if [ ${#subject} -lt 10 ]; then
+  echo "❌ Commit message subject is too short (minimum 10 characters)"
+  exit 1
+fi
+
+# Check for common mistakes
+if echo "$commit_msg" | grep -qiE '(wip|fixme|todo|hack)'; then
+  echo "⚠️  Warning: Commit message contains WIP/FIXME/TODO/HACK"
+  echo "   Consider completing the work before committing."
+fi
+
+echo "✅ Commit message format is valid"
+

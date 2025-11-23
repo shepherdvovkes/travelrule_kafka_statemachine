@@ -1,0 +1,474 @@
+name: FinTech CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '20.x'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # ============================================
+  # SECURITY SCANNING
+  # ============================================
+  security-scan:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Secret scanning
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Dependency vulnerability scanning
+      - name: Run npm audit
+        run: |
+          npm audit --audit-level=moderate || true
+          npm audit --json > audit-report.json || true
+
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: npm-audit-report
+          path: audit-report.json
+
+      # SAST - Static Application Security Testing
+      - name: Run Semgrep
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: >-
+            p/security-audit
+            p/typescript
+            p/javascript
+            p/nestjs
+          generateSarif: "1"
+
+      - name: Upload Semgrep results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: semgrep.sarif
+
+      # CodeQL Analysis
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript,typescript
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+  # ============================================
+  # CODE QUALITY
+  # ============================================
+  lint:
+    name: Lint & Format Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Check Prettier formatting
+        run: npm run format:check
+
+      - name: Run TypeScript type check
+        run: npm run type-check
+
+  # ============================================
+  # TESTING
+  # ============================================
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: remedy_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/remedy_test
+      NODE_ENV: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run database migrations
+        run: npm run migration:run
+
+      - name: Run unit tests
+        run: npm run test:unit
+        env:
+          CI: true
+
+      - name: Run integration tests
+        run: npm run test:integration
+        env:
+          CI: true
+
+      - name: Generate coverage report
+        run: npm run test:cov
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          fail_ci_if_error: true
+          minimum_coverage: 80
+
+      - name: Check test coverage threshold
+        run: |
+          COVERAGE=$(npm run test:cov:check 2>&1 | grep -oP 'All files\s+\|\s+\K[\d.]+')
+          echo "Coverage: $COVERAGE%"
+          if (( $(echo "$COVERAGE < 80" | bc -l) )); then
+            echo "❌ Coverage is below 80% threshold"
+            exit 1
+          fi
+
+  # ============================================
+  # BUILD
+  # ============================================
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Check for build artifacts
+        run: |
+          if [ ! -d "dist" ]; then
+            echo "❌ Build failed: dist directory not found"
+            exit 1
+          fi
+          echo "✅ Build successful"
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: dist/
+          retention-days: 7
+
+  # ============================================
+  # COMPLIANCE CHECKS
+  # ============================================
+  compliance-check:
+    name: Compliance Validation
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Check for hardcoded secrets
+      - name: Check for secrets in code
+        run: |
+          if grep -r "password\|secret\|api_key\|private_key" --include="*.ts" --include="*.js" src/ | grep -v "process.env" | grep -v "//" | grep -v "test"; then
+            echo "❌ Potential hardcoded secrets found"
+            exit 1
+          fi
+          echo "✅ No hardcoded secrets detected"
+
+      # Check for PII in logs
+      - name: Check for PII in logging
+        run: |
+          if grep -r "console.log\|logger.*accountNumber\|logger.*ssn\|logger.*passport" --include="*.ts" src/ | grep -v "test"; then
+            echo "⚠️  Potential PII logging detected - please review"
+          fi
+
+      # Check for audit logging in critical operations
+      - name: Verify audit logging
+        run: |
+          CRITICAL_FUNCTIONS=("createTransaction" "submitTravelRule" "updatePolicy")
+          for func in "${CRITICAL_FUNCTIONS[@]}"; do
+            if ! grep -r "auditLog\|audit.*log" --include="*.ts" src/ | grep -i "$func"; then
+              echo "⚠️  Audit logging may be missing for: $func"
+            fi
+          done
+
+      # Check Travel Rule compliance
+      - name: Check Travel Rule implementation
+        run: |
+          if ! grep -r "IVMS-101\|travel.*rule\|TravelRule" --include="*.ts" src/ | grep -v "test"; then
+            echo "⚠️  Travel Rule implementation not found"
+          fi
+
+  # ============================================
+  # DOCKER BUILD & SECURITY SCAN
+  # ============================================
+  docker-build:
+    name: Build & Scan Docker Image
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=sha,prefix={{branch}}-
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Security scan of Docker image
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ steps.meta.outputs.tags }}
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: trivy-results.sarif
+
+      - name: Save Docker image
+        run: |
+          docker save ${{ steps.meta.outputs.tags }} | gzip > image.tar.gz
+
+      - name: Upload Docker image
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: image.tar.gz
+
+  # ============================================
+  # DEPLOYMENT (Staging)
+  # ============================================
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [security-scan, lint, test, build, compliance-check, docker-build]
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    environment:
+      name: staging
+      url: https://staging.remedy.finance
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+
+      - name: Deploy to AWS (Staging)
+        run: |
+          echo "🚀 Deploying to staging environment..."
+          # Add your deployment commands here
+          # Example: aws s3 sync dist/ s3://staging-bucket/
+
+      - name: Run smoke tests
+        run: |
+          echo "🧪 Running smoke tests..."
+          # Add smoke test commands
+
+      - name: Notify deployment
+        uses: 8398a7/action-slack@v3
+        if: always()
+        with:
+          status: ${{ job.status }}
+          text: 'Staging deployment completed'
+          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+
+  # ============================================
+  # DEPLOYMENT (Production)
+  # ============================================
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [security-scan, lint, test, build, compliance-check, docker-build]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment:
+      name: production
+      url: https://remedy.finance
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+
+      - name: Require manual approval
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.TOKEN }}
+          approvers: admin,security-team
+          minimum-approvals: 2
+          issue-title: "Production Deployment Approval Required"
+          issue-body: |
+            Production deployment requires approval from at least 2 team members.
+            
+            Changes in this deployment:
+            - Commit: ${{ github.sha }}
+            - Author: ${{ github.actor }}
+            - Branch: ${{ github.ref }}
+
+      - name: Deploy to AWS (Production)
+        run: |
+          echo "🚀 Deploying to production environment..."
+          # Add your deployment commands here
+
+      - name: Run production smoke tests
+        run: |
+          echo "🧪 Running production smoke tests..."
+
+      - name: Notify deployment
+        uses: 8398a7/action-slack@v3
+        if: always()
+        with:
+          status: ${{ job.status }}
+          text: 'Production deployment completed'
+          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+
+  # ============================================
+  # FINAL STATUS CHECK
+  # ============================================
+  pipeline-status:
+    name: Pipeline Status
+    runs-on: ubuntu-latest
+    needs: [security-scan, lint, test, build, compliance-check]
+    if: always()
+    
+    steps:
+      - name: Check pipeline status
+        run: |
+          if [ "${{ needs.security-scan.result }}" != "success" ]; then
+            echo "❌ Security scan failed"
+            exit 1
+          fi
+          if [ "${{ needs.lint.result }}" != "success" ]; then
+            echo "❌ Lint check failed"
+            exit 1
+          fi
+          if [ "${{ needs.test.result }}" != "success" ]; then
+            echo "❌ Tests failed"
+            exit 1
+          fi
+          if [ "${{ needs.compliance-check.result }}" != "success" ]; then
+            echo "❌ Compliance check failed"
+            exit 1
+          fi
+          echo "✅ All checks passed"
+

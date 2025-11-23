@@ -1,0 +1,64 @@
+# CODEOWNERS file for Remedy FinTech project
+# Automatically assigns reviewers based on file paths
+
+# Global owners - all files require review from these teams
+* @remedy-security-team @remedy-compliance-team
+
+# Security-critical files
+/.github/workflows/ @remedy-security-team @remedy-devops
+/src/**/security/ @remedy-security-team
+/src/**/auth/ @remedy-security-team
+/src/**/encryption/ @remedy-security-team
+/src/**/crypto/ @remedy-security-team
+
+# Compliance-critical files
+/src/**/travel-rule/ @remedy-compliance-team @remedy-security-team
+/src/**/aml/ @remedy-compliance-team
+/src/**/kyc/ @remedy-compliance-team
+/src/**/compliance/ @remedy-compliance-team
+/src/**/ivms/ @remedy-compliance-team
+
+# Payment/Transaction files (critical business logic)
+/src/**/payment/ @remedy-senior-engineers @remedy-security-team
+/src/**/transaction/ @remedy-senior-engineers @remedy-security-team
+/src/**/wallet/ @remedy-senior-engineers @remedy-security-team
+/src/**/mpc/ @remedy-senior-engineers @remedy-security-team
+
+# Policy Engine
+/src/**/policy/ @remedy-compliance-team @remedy-senior-engineers
+/src/**/policy-engine/ @remedy-compliance-team @remedy-senior-engineers
+
+# Address Book / RemiTags
+/src/**/address-book/ @remedy-backend-team
+/src/**/remitag/ @remedy-backend-team
+
+# Infrastructure & DevOps
+/docker/ @remedy-devops
+/.github/ @remedy-devops @remedy-security-team
+/aws/ @remedy-devops
+/terraform/ @remedy-devops
+/docker-compose.yml @remedy-devops
+/Dockerfile @remedy-devops
+
+# Database & Migrations
+/src/**/database/ @remedy-backend-team
+/migrations/ @remedy-backend-team @remedy-senior-engineers
+/src/**/entity/ @remedy-backend-team
+/src/**/repository/ @remedy-backend-team
+
+# Configuration files
+/.env.example @remedy-devops @remedy-security-team
+/package.json @remedy-backend-team
+/tsconfig.json @remedy-backend-team
+/nest-cli.json @remedy-backend-team
+
+# Documentation
+/CODE_GUIDE.md @remedy-security-team @remedy-compliance-team
+/README.md @remedy-backend-team
+/docs/ @remedy-backend-team
+
+# Tests (require review for critical test changes)
+/src/**/*.spec.ts @remedy-backend-team
+/src/**/*.test.ts @remedy-backend-team
+/e2e/ @remedy-backend-team @remedy-senior-engineers
+

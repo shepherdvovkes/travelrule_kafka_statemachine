@@ -1,0 +1,53 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running pre-commit checks..."
+
+# Run linting
+echo "📝 Running ESLint..."
+npm run lint || {
+  echo "❌ ESLint failed. Please fix the errors before committing."
+  exit 1
+}
+
+# Check formatting
+echo "🎨 Checking code formatting..."
+npm run format:check || {
+  echo "❌ Code formatting check failed. Run 'npm run format' to fix."
+  exit 1
+}
+
+# Type checking
+echo "🔷 Running TypeScript type check..."
+npm run type-check || {
+  echo "❌ TypeScript type check failed. Please fix the errors."
+  exit 1
+}
+
+# Run tests
+echo "🧪 Running tests..."
+npm run test:unit || {
+  echo "❌ Unit tests failed. Please fix the tests before committing."
+  exit 1
+}
+
+# Check for secrets
+echo "🔒 Checking for secrets..."
+if command -v gitleaks >/dev/null 2>&1; then
+  gitleaks detect --source . --no-banner --verbose || {
+    echo "❌ Potential secrets detected. Please remove them before committing."
+    exit 1
+  }
+else
+  echo "⚠️  gitleaks not installed. Skipping secret check."
+  echo "   Install with: brew install gitleaks (macOS) or download from https://github.com/gitleaks/gitleaks"
+fi
+
+# Check for large files
+echo "📦 Checking for large files..."
+if git diff --cached --name-only | grep -E '\.(jpg|jpeg|png|gif|pdf|zip|tar|gz)$' > /dev/null; then
+  echo "⚠️  Warning: Large binary files detected. Consider using Git LFS."
+fi
+
+echo "✅ All pre-commit checks passed!"
+

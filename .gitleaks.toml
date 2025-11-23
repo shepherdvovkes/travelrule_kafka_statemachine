@@ -1,0 +1,80 @@
+# Gitleaks configuration for Remedy FinTech project
+# Detects secrets and sensitive information in code
+
+title = "Remedy Gitleaks Config"
+
+[extend]
+# Use default rules
+useDefault = true
+
+[allowlist]
+description = "Allowlist for known false positives"
+paths = [
+  '''\.test\.ts$''',
+  '''\.spec\.ts$''',
+  '''\.example\.ts$''',
+  '''\.md$''',
+  '''\.json$''',
+  '''package-lock\.json$''',
+  '''yarn\.lock$''',
+]
+
+commits = [
+  # Add commit hashes here if needed to allowlist specific commits
+]
+
+regexes = [
+  # Allow example/test values
+  '''example.*key''',
+  '''test.*secret''',
+  '''mock.*token''',
+]
+
+[rules]
+# Custom rules for Remedy-specific patterns
+
+id = "remedy-api-key"
+description = "Remedy API Key"
+regex = '''remedy[_-]?api[_-]?key\s*=\s*['"][a-zA-Z0-9]{32,}['"]'''
+tags = ["key", "api", "remedy"]
+
+id = "aws-access-key"
+description = "AWS Access Key"
+regex = '''AKIA[0-9A-Z]{16}'''
+tags = ["aws", "key"]
+
+id = "aws-secret-key"
+description = "AWS Secret Key"
+regex = '''aws[_-]?secret[_-]?access[_-]?key\s*=\s*['"][a-zA-Z0-9/+=]{40}['"]'''
+tags = ["aws", "key", "secret"]
+
+id = "private-key"
+description = "Private Key (RSA, EC, etc.)"
+regex = '''-----BEGIN\s+(RSA\s+)?PRIVATE\s+KEY-----'''
+tags = ["key", "private", "crypto"]
+
+id = "jwt-secret"
+description = "JWT Secret"
+regex = '''jwt[_-]?secret\s*=\s*['"][a-zA-Z0-9]{32,}['"]'''
+tags = ["jwt", "secret", "auth"]
+
+id = "database-password"
+description = "Database Password"
+regex = '''(database|db)[_-]?password\s*=\s*['"][^'"]{8,}['"]'''
+tags = ["database", "password", "secret"]
+
+id = "encryption-key"
+description = "Encryption Key"
+regex = '''encryption[_-]?key\s*=\s*['"][a-zA-Z0-9]{32,}['"]'''
+tags = ["encryption", "key", "crypto"]
+
+id = "circle-api-key"
+description = "Circle API Key"
+regex = '''circle[_-]?api[_-]?key\s*=\s*['"][a-zA-Z0-9]{32,}['"]'''
+tags = ["circle", "api", "key"]
+
+id = "defens-api-key"
+description = "Defens API Key"
+regex = '''defens[_-]?api[_-]?key\s*=\s*['"][a-zA-Z0-9]{32,}['"]'''
+tags = ["defens", "api", "key"]
+
