@@ -1,165 +1,165 @@
 # Remedy Backend
 
-> **Remedy** — инфраструктурный финтех-продукт, создающий "SWIFT для стейблкоинов"
+> **Remedy** is an infrastructure FinTech product creating "SWIFT for stablecoins"
 
-##  Описание
+## Description
 
-Remedy — это API-сеть для банков и криптофинкомпаний, позволяющая безболезненно подключаться друг к другу и пересылать стейблкоины с соблюдением всех регуляторных требований (Travel Rule, AML/KYC), независимо от блокчейна или токена.
+Remedy is an API network for banks and crypto-financial companies, allowing seamless connection to each other and sending stablecoins while complying with all regulatory requirements (Travel Rule, AML/KYC), regardless of blockchain or token.
 
-##  Архитектура
+## Architecture
 
 - **Backend**: NestJS + TypeScript
 - **Database**: PostgreSQL 15+
 - **Infrastructure**: AWS
 - **MPC Wallets**: Defens.com
-- **Cross-chain**: Circle CCTP (планируется)
+- **Cross-chain**: Circle CCTP (planned)
 
-##  Быстрый старт
+## Quick Start
 
-### Предварительные требования
+### Prerequisites
 
 - Node.js 20.x
 - PostgreSQL 15+
 - Git 2.30+
 
-### Установка
+### Installation
 
 ```bash
-# Клонирование репозитория
+# Clone repository
 git clone https://github.com/remedy/remedy-backend.git
 cd remedy-backend
 
-# Установка зависимостей
+# Install dependencies
 npm install
 
-# Настройка переменных окружения
+# Configure environment variables
 cp .env.example .env
-# Отредактируйте .env файл
+# Edit .env file
 
-# Настройка базы данных
+# Setup database
 createdb remedy_dev
 npm run migration:run
 
-# Настройка Git hooks
+# Setup Git hooks
 npm run prepare
 
-# Запуск в режиме разработки
+# Run in development mode
 npm run start:dev
 ```
 
-Подробная инструкция по настройке: [.github/SETUP.md](.github/SETUP.md)
+Detailed setup instructions: [.github/SETUP.md](.github/SETUP.md)
 
-##  Документация
+## Documentation
 
-- **[CODE_GUIDE.md](CODE_GUIDE.md)** - Полное руководство по стандартам кода для финтех систем
-- **[.github/SETUP.md](.github/SETUP.md)** - Настройка development окружения
-- **[.github/BRANCH_PROTECTION.md](.github/BRANCH_PROTECTION.md)** - Правила защиты веток
-- **[.github/PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md)** - Шаблон Pull Request
+- **[CODE_GUIDE.md](CODE_GUIDE.md)** - Complete code standards guide for FinTech systems
+- **[.github/SETUP.md](.github/SETUP.md)** - Development environment setup
+- **[.github/BRANCH_PROTECTION.md](.github/BRANCH_PROTECTION.md)** - Branch protection rules
+- **[.github/PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md)** - Pull Request template
 
-##  Тестирование
+## Testing
 
 ```bash
-# Все тесты
+# All tests
 npm run test
 
-# Unit тесты
+# Unit tests
 npm run test:unit
 
-# Integration тесты
+# Integration tests
 npm run test:integration
 
-# E2E тесты
+# E2E tests
 npm run test:e2e
 
-# С покрытием
+# With coverage
 npm run test:cov
 ```
 
-**Требование**: Минимум 80% покрытия тестами для всех модулей.
+**Requirement**: Minimum 80% test coverage for all modules.
 
-##  Безопасность
+## Security
 
-Remedy следует строгим стандартам безопасности для финтех систем:
+Remedy follows strict security standards for FinTech systems:
 
--  SAST (Static Application Security Testing) в CI/CD
--  Dependency scanning (npm audit, Snyk, Dependabot)
--  Secret scanning (Gitleaks)
--  CodeQL analysis
--  Security reviews для всех изменений
+- SAST (Static Application Security Testing) in CI/CD
+- Dependency scanning (npm audit, Snyk, Dependabot)
+- Secret scanning (Gitleaks)
+- CodeQL analysis
+- Security reviews for all changes
 
-**Сообщить о проблеме безопасности**: security@remedy.finance
+**Report security issue**: security@remedy.finance
 
-##  Compliance
+## Compliance
 
-Remedy соответствует следующим регуляторным требованиям:
+Remedy complies with the following regulatory requirements:
 
-- **Travel Rule (IVMS-101)**: Обмен AML/KYC данными между компаниями
-- **AML/KYC**: Проверка всех участников транзакций
-- **GDPR**: Защита персональных данных
-- **Audit Trail**: Полное логирование всех операций
+- **Travel Rule (IVMS-101)**: Exchange of AML/KYC data between companies
+- **AML/KYC**: Verification of all transaction participants
+- **GDPR**: Personal data protection
+- **Audit Trail**: Complete logging of all operations
 
-##  Разработка
+## Development
 
 ### Code Style
 
-Проект использует:
-- **ESLint** для линтинга
-- **Prettier** для форматирования
-- **TypeScript strict mode** для типизации
+The project uses:
+- **ESLint** for linting
+- **Prettier** for formatting
+- **TypeScript strict mode** for typing
 
 ```bash
-# Линтинг
+# Linting
 npm run lint
 
-# Форматирование
+# Formatting
 npm run format
 
-# Проверка типов
+# Type checking
 npm run type-check
 ```
 
 ### Git Workflow
 
-1. Создайте feature/fix ветку от `develop`
-2. Разработайте и протестируйте изменения
-3. Создайте Pull Request
-4. Дождитесь прохождения CI/CD checks
-5. Получите approval от ревьюеров
-6. Merge в `develop` или `main`
+1. Create feature/fix branch from `develop`
+2. Develop and test changes
+3. Create Pull Request
+4. Wait for CI/CD checks to pass
+5. Get approval from reviewers
+6. Merge to `develop` or `main`
 
-**Важно**: Все коммиты должны следовать [Conventional Commits](https://www.conventionalcommits.org/) формату.
+**Important**: All commits must follow [Conventional Commits](https://www.conventionalcommits.org/) format.
 
 ### Pre-commit Hooks
 
-Автоматически проверяются перед каждым коммитом:
--  Линтинг (ESLint)
--  Форматирование (Prettier)
--  Типы (TypeScript)
--  Тесты (Unit)
--  Секреты (Gitleaks)
+Automatically checked before each commit:
+- Linting (ESLint)
+- Formatting (Prettier)
+- Types (TypeScript)
+- Tests (Unit)
+- Secrets (Gitleaks)
 
-##  Структура проекта
+## Project Structure
 
 ```
 remedy-backend/
- src/
-    travel-rule/      # Travel Rule (IVMS-101) модуль
-    aml/              # AML/KYC модуль
-    payment/          # Payment processing
-    transaction/      # Transaction management
-    address-book/     # Address Book / RemiTags
-    policy-engine/    # Policy Engine
-    security/         # Security utilities
-    common/           # Общие утилиты
- test/                 # Тесты
- migrations/           # Database migrations
- .github/              # GitHub workflows и templates
- docs/                 # Документация
+├── src/
+│   ├── travel-rule/      # Travel Rule (IVMS-101) module
+│   ├── aml/              # AML/KYC module
+│   ├── payment/          # Payment processing
+│   ├── transaction/      # Transaction management
+│   ├── address-book/     # Address Book / RemiTags
+│   ├── policy-engine/    # Policy Engine
+│   ├── security/         # Security utilities
+│   └── common/           # Common utilities
+├── test/                 # Tests
+├── migrations/           # Database migrations
+├── .github/              # GitHub workflows and templates
+└── docs/                 # Documentation
 ```
 
-##  CI/CD
+## CI/CD
 
-GitHub Actions автоматически выполняет:
+GitHub Actions automatically performs:
 
 1. **Security Scanning**
    - Gitleaks (secret scanning)
@@ -175,7 +175,7 @@ GitHub Actions автоматически выполняет:
 3. **Testing**
    - Unit tests
    - Integration tests
-   - Coverage reporting (минимум 80%)
+   - Coverage reporting (minimum 80%)
 
 4. **Compliance Checks**
    - Secret detection
@@ -188,17 +188,16 @@ GitHub Actions автоматически выполняет:
    - Security scan (Trivy)
    - Deployment to staging/production
 
-##  Контакты
+## Contacts
 
 - **Security Issues**: security@remedy.finance
 - **Compliance Questions**: compliance@remedy.finance
 - **Technical Questions**: tech@remedy.finance
 
-##  Лицензия
+## License
 
-Proprietary - Все права защищены
+Proprietary - All rights reserved
 
 ---
 
-**Remedy Team** | Ноябрь 2025
-
+**Remedy Team** | November 2025

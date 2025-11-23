@@ -1,163 +1,162 @@
 # GitHub Actions Workflows
 
-Этот каталог содержит все GitHub Actions workflows для Remedy проекта.
+This directory contains all GitHub Actions workflows for the Remedy project.
 
 ## Workflows
 
-### 1. `ci-cd.yml` - Основной CI/CD Pipeline
+### 1. `ci-cd.yml` - Main CI/CD Pipeline
 
-**Триггеры:**
-- Push в `main` или `develop`
-- Pull Request в `main` или `develop`
+**Triggers:**
+- Push to `main` or `develop`
+- Pull Request to `main` or `develop`
 - Manual trigger (workflow_dispatch)
 
 **Jobs:**
-1. **security-scan** - Сканирование безопасности
+1. **security-scan** - Security scanning
    - Gitleaks (secret scanning)
    - npm audit (dependency vulnerabilities)
    - Semgrep (SAST)
    - CodeQL analysis
 
-2. **lint** - Проверка качества кода
+2. **lint** - Code quality check
    - ESLint
    - Prettier
    - TypeScript type check
 
-3. **test** - Тестирование
+3. **test** - Testing
    - Unit tests
    - Integration tests
-   - Coverage reporting (минимум 80%)
+   - Coverage reporting (minimum 80%)
 
-4. **build** - Сборка приложения
+4. **build** - Application build
    - TypeScript compilation
    - Build artifacts
 
-5. **compliance-check** - Compliance проверки
+5. **compliance-check** - Compliance checks
    - Secret detection
    - PII logging checks
    - Audit logging verification
    - Travel Rule compliance
 
-6. **docker-build** - Сборка Docker образа
+6. **docker-build** - Docker image build
    - Docker image build
    - Trivy security scan
 
-7. **deploy-staging** - Деплой в staging
-   - Только для ветки `develop`
-   - Требует прохождения всех checks
+7. **deploy-staging** - Deploy to staging
+   - Only for `develop` branch
+   - Requires all checks to pass
 
-8. **deploy-production** - Деплой в production
-   - Только для ветки `main`
-   - Требует manual approval (2 approvals)
-   - Требует прохождения всех checks
+8. **deploy-production** - Deploy to production
+   - Only for `main` branch
+   - Requires manual approval (2 approvals)
+   - Requires all checks to pass
 
 ### 2. `dependency-review.yml` - Dependency Review
 
-**Триггеры:**
-- Pull Request в `main` или `develop`
+**Triggers:**
+- Pull Request to `main` or `develop`
 
-**Функциональность:**
-- Автоматический review зависимостей
-- Проверка лицензий
-- Блокировка небезопасных зависимостей
+**Functionality:**
+- Automatic dependency review
+- License checking
+- Block unsafe dependencies
 
 ### 3. `codeql.yml` - CodeQL Security Analysis
 
-**Триггеры:**
-- Push в `main` или `develop`
-- Pull Request в `main` или `develop`
-- Еженедельно (воскресенье)
+**Triggers:**
+- Push to `main` or `develop`
+- Pull Request to `main` or `develop`
+- Weekly (Sunday)
 
-**Функциональность:**
-- Статический анализ безопасности кода
-- Поиск уязвимостей
-- Интеграция с GitHub Security
+**Functionality:**
+- Static security code analysis
+- Vulnerability detection
+- Integration with GitHub Security
 
-## Требования
+## Requirements
 
 ### Secrets
 
-Следующие secrets должны быть настроены в GitHub:
+The following secrets must be configured in GitHub:
 
-- `GITHUB_TOKEN` - автоматически предоставляется GitHub
-- `CODECOV_TOKEN` - для загрузки coverage reports
-- `SLACK_WEBHOOK` - для уведомлений о деплое
-- AWS credentials (для деплоя):
+- `GITHUB_TOKEN` - automatically provided by GitHub
+- `CODECOV_TOKEN` - for uploading coverage reports
+- `SLACK_WEBHOOK` - for deployment notifications
+- AWS credentials (for deployment):
   - `AWS_ACCESS_KEY_ID`
   - `AWS_SECRET_ACCESS_KEY`
   - `AWS_REGION`
 
 ### Environments
 
-Следующие environments должны быть настроены:
+The following environments must be configured:
 
-- `staging` - для staging деплоев
-- `production` - для production деплоев (требует manual approval)
+- `staging` - for staging deployments
+- `production` - for production deployments (requires manual approval)
 
-## Настройка
+## Setup
 
-### 1. Настройка Secrets
+### 1. Configure Secrets
 
-Перейдите в **Settings → Secrets and variables → Actions** и добавьте необходимые secrets.
+Go to **Settings → Secrets and variables → Actions** and add necessary secrets.
 
-### 2. Настройка Environments
+### 2. Configure Environments
 
-Перейдите в **Settings → Environments** и создайте:
+Go to **Settings → Environments** and create:
 - `staging`
-- `production` (с required reviewers)
+- `production` (with required reviewers)
 
-### 3. Настройка Branch Protection
+### 3. Configure Branch Protection
 
-См. [BRANCH_PROTECTION.md](../BRANCH_PROTECTION.md) для детальной инструкции.
+See [BRANCH_PROTECTION.md](../BRANCH_PROTECTION.md) for detailed instructions.
 
-## Мониторинг
+## Monitoring
 
-### Проверка статуса
+### Check Status
 
-- Перейдите в **Actions** tab на GitHub
-- Выберите workflow run
-- Просмотрите детали каждого job
+- Go to **Actions** tab on GitHub
+- Select workflow run
+- View details of each job
 
-### Уведомления
+### Notifications
 
-- Slack уведомления отправляются при деплое
-- Email уведомления для failed workflows (настраивается в GitHub)
+- Slack notifications sent on deployment
+- Email notifications for failed workflows (configured in GitHub)
 
 ## Troubleshooting
 
-### Workflow не запускается
+### Workflow not starting
 
-1. Проверьте, что workflow файл находится в `.github/workflows/`
-2. Проверьте синтаксис YAML
-3. Проверьте триггеры (on:)
+1. Check that workflow file is in `.github/workflows/`
+2. Check YAML syntax
+3. Check triggers (on:)
 
 ### Job fails
 
-1. Проверьте логи job
-2. Проверьте, что все secrets настроены
-3. Проверьте, что все зависимости установлены
+1. Check job logs
+2. Check that all secrets are configured
+3. Check that all dependencies are installed
 
 ### Security scan fails
 
-1. Проверьте, нет ли реальных секретов в коде
-2. Проверьте `.gitleaks.toml` для allowlist
-3. Исправьте найденные проблемы
+1. Check that there are no real secrets in code
+2. Check `.gitleaks.toml` for allowlist
+3. Fix found issues
 
 ### Tests fail
 
-1. Проверьте, что все тесты проходят локально
-2. Проверьте coverage threshold (80%)
-3. Проверьте, что база данных настроена правильно
+1. Check that all tests pass locally
+2. Check coverage threshold (80%)
+3. Check that database is configured correctly
 
 ## Best Practices
 
-1. **Не коммитьте секреты** - используйте GitHub Secrets
-2. **Тестируйте локально** - перед созданием PR
-3. **Следуйте CODE_GUIDE.md** - для всех изменений
-4. **Проверяйте coverage** - минимум 80% для всех модулей
-5. **Review перед merge** - минимум 1 approval для develop, 2 для main
+1. **Do not commit secrets** - use GitHub Secrets
+2. **Test locally** - before creating PR
+3. **Follow CODE_GUIDE.md** - for all changes
+4. **Check coverage** - minimum 80% for all modules
+5. **Review before merge** - minimum 1 approval for develop, 2 for main
 
 ---
 
-**Важно**: Все workflows критически важны для обеспечения безопасности и качества кода. Не отключайте их без крайней необходимости.
-
+**Important**: All workflows are critical for ensuring security and code quality. Do not disable them without extreme necessity.

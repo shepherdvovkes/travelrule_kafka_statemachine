@@ -1,199 +1,199 @@
-# Сводка реализации Code Guide и CI/CD для Remedy
+# Code Guide and CI/CD Implementation Summary for Remedy
 
-##  Созданные файлы
+## Created Files
 
-###  Документация
+### Documentation
 
-1. **CODE_GUIDE.md** - Comprehensive code guide для финтех систем
-   - Общие принципы разработки
-   - Требования безопасности
-   - Стандарты кодирования
-   - Compliance требования (Travel Rule, AML/KYC, GDPR)
-   - Тестирование (минимум 80% coverage)
-   - Code Review процесс
+1. **CODE_GUIDE.md** - Comprehensive code guide for FinTech systems
+   - General development principles
+   - Security requirements
+   - Coding standards
+   - Compliance requirements (Travel Rule, AML/KYC, GDPR)
+   - Testing (minimum 80% coverage)
+   - Code Review process
    - Git Workflow
-   - Мониторинг и логирование
-   - Инцидент-менеджмент
+   - Monitoring and logging
+   - Incident management
 
-2. **README.md** - Основная документация проекта
-   - Описание проекта
-   - Быстрый старт
-   - Ссылки на все руководства
+2. **README.md** - Main project documentation
+   - Project description
+   - Quick start
+   - Links to all guides
 
-3. **.github/SETUP.md** - Настройка development окружения
-   - Предварительные требования
-   - Пошаговая установка
-   - Настройка IDE
+3. **.github/SETUP.md** - Development environment setup
+   - Prerequisites
+   - Step-by-step installation
+   - IDE setup
    - Troubleshooting
 
-4. **.github/BRANCH_PROTECTION.md** - Правила защиты веток
-   - Настройка через GitHub UI
-   - CODEOWNERS файл
-   - Terraform конфигурация (опционально)
+4. **.github/BRANCH_PROTECTION.md** - Branch protection rules
+   - Setup via GitHub UI
+   - CODEOWNERS file
+   - Terraform configuration (optional)
 
-5. **.github/workflows/README.md** - Документация по workflows
+5. **.github/workflows/README.md** - Workflows documentation
 
-###  GitHub Actions CI/CD
+### GitHub Actions CI/CD
 
-1. **.github/workflows/ci-cd.yml** - Основной CI/CD pipeline
+1. **.github/workflows/ci-cd.yml** - Main CI/CD pipeline
    - Security scanning (Gitleaks, npm audit, Semgrep, CodeQL)
    - Code quality (ESLint, Prettier, TypeScript)
    - Testing (Unit, Integration, E2E, Coverage)
    - Compliance checks
    - Docker build & security scan
-   - Deployment (Staging & Production с manual approval)
+   - Deployment (Staging & Production with manual approval)
 
 2. **.github/workflows/dependency-review.yml** - Dependency review
-   - Автоматический review зависимостей
-   - Проверка лицензий
-   - Блокировка небезопасных зависимостей
+   - Automatic dependency review
+   - License checking
+   - Block unsafe dependencies
 
 3. **.github/workflows/codeql.yml** - CodeQL Security Analysis
-   - Статический анализ безопасности
-   - Еженедельное сканирование
+   - Static security analysis
+   - Weekly scanning
 
-###  Templates
+### Templates
 
-1. **.github/PULL_REQUEST_TEMPLATE.md** - Шаблон Pull Request
+1. **.github/PULL_REQUEST_TEMPLATE.md** - Pull Request template
    - Security checklist
    - Compliance checklist
    - Testing checklist
    - Documentation checklist
 
-2. **.github/ISSUE_TEMPLATE/bug_report.md** - Шаблон для багов
-   - Security impact оценка
-   - Compliance impact оценка
+2. **.github/ISSUE_TEMPLATE/bug_report.md** - Bug template
+   - Security impact assessment
+   - Compliance impact assessment
 
-3. **.github/ISSUE_TEMPLATE/security_issue.md** - Шаблон для security issues
-   - Приоритизация по критичности
-   - Типы уязвимостей
+3. **.github/ISSUE_TEMPLATE/security_issue.md** - Security issue template
+   - Criticality prioritization
+   - Vulnerability types
 
-4. **.github/ISSUE_TEMPLATE/feature_request.md** - Шаблон для feature requests
-   - Compliance impact оценка
-   - Security impact оценка
+4. **.github/ISSUE_TEMPLATE/feature_request.md** - Feature request template
+   - Compliance impact assessment
+   - Security impact assessment
 
-###  Конфигурационные файлы
+### Configuration Files
 
-1. **.eslintrc.js** - ESLint конфигурация
+1. **.eslintrc.js** - ESLint configuration
    - TypeScript strict rules
    - Security rules (eslint-plugin-security)
    - Code quality rules (eslint-plugin-sonarjs)
    - FinTech-specific rules
 
-2. **.prettierrc** - Prettier конфигурация
-   - Единый стиль форматирования
+2. **.prettierrc** - Prettier configuration
+   - Unified formatting style
 
-3. **.prettierignore** - Игнорируемые файлы для Prettier
+3. **.prettierignore** - Ignored files for Prettier
 
-4. **.gitleaks.toml** - Gitleaks конфигурация
-   - Правила для обнаружения секретов
+4. **.gitleaks.toml** - Gitleaks configuration
+   - Rules for secret detection
    - Remedy-specific patterns
-   - Allowlist для тестов
+   - Allowlist for tests
 
-5. **.gitignore** - Git ignore правила
-   - Исключение секретов и чувствительных файлов
+5. **.gitignore** - Git ignore rules
+   - Exclude secrets and sensitive files
 
-6. **.editorconfig** - EditorConfig для единообразия
+6. **.editorconfig** - EditorConfig for consistency
 
-7. **.nvmrc** - Node.js версия (20)
+7. **.nvmrc** - Node.js version (20)
 
-8. **.github/CODEOWNERS** - Автоматическое назначение ревьюеров
+8. **.github/CODEOWNERS** - Automatic reviewer assignment
    - Security-critical files → security team
    - Compliance-critical files → compliance team
    - Payment/Transaction files → senior engineers
 
-###  Development Tools
+### Development Tools
 
 1. **.husky/pre-commit** - Pre-commit hook
-   - ESLint проверка
-   - Prettier проверка
+   - ESLint check
+   - Prettier check
    - TypeScript type check
    - Unit tests
    - Secret scanning (Gitleaks)
 
 2. **.husky/commit-msg** - Commit message validation
-   - Проверка формата (Conventional Commits)
-   - Минимальная длина subject
+   - Format check (Conventional Commits)
+   - Minimum subject length
 
-3. **package.json.example** - Пример package.json
-   - Все необходимые scripts
-   - Dev dependencies для линтинга и тестирования
+3. **package.json.example** - Example package.json
+   - All necessary scripts
+   - Dev dependencies for linting and testing
 
-4. **tsconfig.json.example** - TypeScript конфигурация
-   - Strict mode включен
-   - Все security checks
+4. **tsconfig.json.example** - TypeScript configuration
+   - Strict mode enabled
+   - All security checks
 
-##  Ключевые особенности
+## Key Features
 
-### Безопасность
--  SAST (Static Application Security Testing)
--  Dependency vulnerability scanning
--  Secret scanning (Gitleaks)
--  CodeQL analysis
--  Security rules в ESLint
--  Pre-commit hooks для проверки секретов
+### Security
+- SAST (Static Application Security Testing)
+- Dependency vulnerability scanning
+- Secret scanning (Gitleaks)
+- CodeQL analysis
+- Security rules in ESLint
+- Pre-commit hooks for secret checking
 
 ### Compliance
--  Travel Rule (IVMS-101) проверки
--  AML/KYC requirements
--  GDPR compliance
--  Audit trail verification
--  PII logging checks
+- Travel Rule (IVMS-101) checks
+- AML/KYC requirements
+- GDPR compliance
+- Audit trail verification
+- PII logging checks
 
-### Качество кода
--  Строгий TypeScript (strict mode)
--  ESLint с security и quality rules
--  Prettier для единообразия
--  Минимум 80% test coverage
--  Code review requirements
+### Code Quality
+- Strict TypeScript (strict mode)
+- ESLint with security and quality rules
+- Prettier for consistency
+- Minimum 80% test coverage
+- Code review requirements
 
 ### CI/CD
--  Автоматические проверки на каждый PR
--  Branch protection rules
--  Manual approval для production
--  Comprehensive testing pipeline
--  Security scanning на каждом этапе
+- Automatic checks on every PR
+- Branch protection rules
+- Manual approval for production
+- Comprehensive testing pipeline
+- Security scanning at every stage
 
-##  Следующие шаги
+## Next Steps
 
-### 1. Настройка GitHub
+### 1. GitHub Setup
 
-1. **Настройте Branch Protection Rules**
-   - Следуйте `.github/BRANCH_PROTECTION.md`
-   - Настройте для `main` и `develop` веток
+1. **Configure Branch Protection Rules**
+   - Follow `.github/BRANCH_PROTECTION.md`
+   - Configure for `main` and `develop` branches
 
-2. **Настройте GitHub Secrets**
-   - `CODECOV_TOKEN` (для coverage reports)
-   - `SLACK_WEBHOOK` (для уведомлений)
-   - AWS credentials (для деплоя)
+2. **Configure GitHub Secrets**
+   - `CODECOV_TOKEN` (for coverage reports)
+   - `SLACK_WEBHOOK` (for notifications)
+   - AWS credentials (for deployment)
 
-3. **Настройте GitHub Environments**
+3. **Configure GitHub Environments**
    - `staging`
-   - `production` (с required reviewers)
+   - `production` (with required reviewers)
 
-4. **Настройте CODEOWNERS**
-   - Создайте teams в GitHub:
+4. **Configure CODEOWNERS**
+   - Create teams in GitHub:
      - `@remedy-security-team`
      - `@remedy-compliance-team`
      - `@remedy-senior-engineers`
      - `@remedy-backend-team`
      - `@remedy-devops`
 
-### 2. Настройка проекта
+### 2. Project Setup
 
-1. **Установите зависимости**
+1. **Install Dependencies**
    ```bash
    npm install
    ```
 
-2. **Настройте Husky**
+2. **Setup Husky**
    ```bash
    npm run prepare
    chmod +x .husky/pre-commit
    chmod +x .husky/commit-msg
    ```
 
-3. **Установите Gitleaks**
+3. **Install Gitleaks**
    ```bash
    # macOS
    brew install gitleaks
@@ -204,16 +204,16 @@
    sudo mv gitleaks-linux-amd64 /usr/local/bin/gitleaks
    ```
 
-4. **Скопируйте примеры конфигураций**
+4. **Copy Configuration Examples**
    ```bash
    cp package.json.example package.json
    cp tsconfig.json.example tsconfig.json
    cp .env.example .env
    ```
 
-### 3. Первый коммит
+### 3. First Commit
 
-1. **Проверьте все локально**
+1. **Check Everything Locally**
    ```bash
    npm run lint
    npm run format:check
@@ -221,76 +221,75 @@
    npm run test
    ```
 
-2. **Создайте первый коммит**
+2. **Create First Commit**
    ```bash
    git add .
    git commit -m "chore: add code guide and CI/CD configuration"
    ```
 
-3. **Проверьте, что pre-commit hooks работают**
-   - Они должны автоматически запуститься
+3. **Verify Pre-commit Hooks Work**
+   - They should automatically run
 
-##  Проверка работы
+## Verification
 
-### Локально
+### Locally
 
 ```bash
-# Линтинг
+# Linting
 npm run lint
 
-# Форматирование
+# Formatting
 npm run format:check
 
-# Типы
+# Types
 npm run type-check
 
-# Тесты
+# Tests
 npm run test
 
-# Проверка секретов
+# Secret check
 gitleaks detect --source . --no-banner
 ```
 
-### В CI/CD
+### In CI/CD
 
-1. Создайте тестовый PR
-2. Проверьте, что все workflows запускаются
-3. Убедитесь, что все checks проходят
-4. Проверьте, что branch protection работает
+1. Create a test PR
+2. Verify all workflows start
+3. Ensure all checks pass
+4. Verify branch protection works
 
-##  Метрики качества
+## Quality Metrics
 
-После настройки вы сможете отслеживать:
+After setup, you can track:
 
-- **Test Coverage**: минимум 80% (проверяется в CI)
-- **Security Issues**: через GitHub Security tab
-- **Code Quality**: через SonarLint и ESLint
-- **Dependency Vulnerabilities**: через Dependabot alerts
-- **Compliance**: через compliance-check job в CI
+- **Test Coverage**: minimum 80% (checked in CI)
+- **Security Issues**: via GitHub Security tab
+- **Code Quality**: via SonarLint and ESLint
+- **Dependency Vulnerabilities**: via Dependabot alerts
+- **Compliance**: via compliance-check job in CI
 
-##  Важные замечания
+## Important Notes
 
-1. **Секреты**: Никогда не коммитьте реальные секреты. Используйте `.env.example` для примеров.
+1. **Secrets**: Never commit real secrets. Use `.env.example` for examples.
 
-2. **Coverage**: Минимум 80% coverage обязателен для всех модулей. CI будет блокировать merge при снижении.
+2. **Coverage**: Minimum 80% coverage is required for all modules. CI will block merge if coverage decreases.
 
-3. **Security Reviews**: Все изменения в security/compliance модулях требуют review от security/compliance команды.
+3. **Security Reviews**: All changes in security/compliance modules require review from security/compliance team.
 
-4. **Breaking Changes**: Всегда документируйте breaking changes и обновляйте версию соответственно.
+4. **Breaking Changes**: Always document breaking changes and update version accordingly.
 
-5. **Production Deployments**: Требуют manual approval от минимум 2 team members.
+5. **Production Deployments**: Require manual approval from minimum 2 team members.
 
-##  Поддержка
+## Support
 
-Если возникнут вопросы:
+If you have questions:
 
-1. Проверьте документацию в `CODE_GUIDE.md`
-2. Проверьте `.github/SETUP.md` для troubleshooting
-3. Обратитесь в команду через Slack/Email
+1. Check documentation in `CODE_GUIDE.md`
+2. Check `.github/SETUP.md` for troubleshooting
+3. Contact team via Slack/Email
 
 ---
 
-**Создано**: Ноябрь 2025  
-**Версия**: 1.0  
-**Статус**:  Готово к использованию
-
+**Created**: November 2025  
+**Version**: 1.0  
+**Status**: Ready for use

@@ -1,22 +1,22 @@
 # Branch Protection Rules
 
-Этот документ описывает настройки защиты веток для обеспечения качества и безопасности кода в Remedy.
+This document describes branch protection settings to ensure code quality and security in Remedy.
 
-## Настройка через GitHub UI
+## Setup via GitHub UI
 
-Перейдите в **Settings → Branches** и настройте следующие правила:
+Go to **Settings → Branches** and configure the following rules:
 
 ### 1. Main Branch Protection
 
 **Branch name pattern**: `main`
 
-#### Обязательные настройки:
--  **Require a pull request before merging**
+#### Required Settings:
+- **Require a pull request before merging**
   - Require approvals: **2**
   - Dismiss stale pull request approvals when new commits are pushed
   - Require review from Code Owners
   
--  **Require status checks to pass before merging**
+- **Require status checks to pass before merging**
   - Required status checks:
     - `security-scan`
     - `lint`
@@ -27,33 +27,33 @@
     - `CodeQL / Analyze (typescript)`
   - Require branches to be up to date before merging
   
--  **Require conversation resolution before merging**
+- **Require conversation resolution before merging**
   
--  **Require signed commits** (рекомендуется)
+- **Require signed commits** (recommended)
   
--  **Require linear history** (рекомендуется)
+- **Require linear history** (recommended)
   
--  **Do not allow bypassing the above settings**
+- **Do not allow bypassing the above settings**
   - Even administrators cannot bypass
   
--  **Restrict who can push to matching branches**
+- **Restrict who can push to matching branches**
   - Only specific teams/individuals
 
-#### Дополнительные настройки:
--  **Lock branch** (после релиза, временно)
--  **Allow force pushes**:  НЕТ
--  **Allow deletions**:  НЕТ
+#### Additional Settings:
+- **Lock branch** (after release, temporarily)
+- **Allow force pushes**: NO
+- **Allow deletions**: NO
 
 ### 2. Develop Branch Protection
 
 **Branch name pattern**: `develop`
 
-#### Обязательные настройки:
--  **Require a pull request before merging**
+#### Required Settings:
+- **Require a pull request before merging**
   - Require approvals: **1**
   - Dismiss stale pull request approvals when new commits are pushed
   
--  **Require status checks to pass before merging**
+- **Require status checks to pass before merging**
   - Required status checks:
     - `security-scan`
     - `lint`
@@ -62,24 +62,24 @@
     - `compliance-check`
   - Require branches to be up to date before merging
   
--  **Require conversation resolution before merging**
+- **Require conversation resolution before merging**
   
--  **Do not allow bypassing the above settings**
+- **Do not allow bypassing the above settings**
   - Even administrators cannot bypass
 
-#### Дополнительные настройки:
--  **Allow force pushes**:  НЕТ
--  **Allow deletions**:  НЕТ
+#### Additional Settings:
+- **Allow force pushes**: NO
+- **Allow deletions**: NO
 
-### 3. Feature/Fix Branch Protection (опционально)
+### 3. Feature/Fix Branch Protection (optional)
 
 **Branch name pattern**: `feature/*`, `fix/*`, `security/*`, `compliance/*`
 
-#### Рекомендуемые настройки:
--  **Require a pull request before merging**
+#### Recommended Settings:
+- **Require a pull request before merging**
   - Require approvals: **1**
   
--  **Require status checks to pass before merging**
+- **Require status checks to pass before merging**
   - Required status checks:
     - `lint`
     - `test`
@@ -87,7 +87,7 @@
 
 ## CODEOWNERS File
 
-Создайте файл `.github/CODEOWNERS` для автоматического назначения ревьюеров:
+Create `.github/CODEOWNERS` file for automatic reviewer assignment:
 
 ```
 # Global owners
@@ -117,12 +117,12 @@
 /migrations/ @remedy-backend-team
 ```
 
-## Настройка через GitHub API (альтернатива)
+## Setup via GitHub API (alternative)
 
-Если вы хотите настроить через API или Infrastructure as Code:
+If you want to configure via API or Infrastructure as Code:
 
 ```bash
-# Пример настройки через GitHub CLI
+# Example setup via GitHub CLI
 gh api repos/:owner/:repo/branches/main/protection \
   --method PUT \
   --field required_status_checks='{"strict":true,"contexts":["security-scan","lint","test","build","compliance-check"]}' \
@@ -131,9 +131,9 @@ gh api repos/:owner/:repo/branches/main/protection \
   --field restrictions=null
 ```
 
-## Terraform Configuration (опционально)
+## Terraform Configuration (optional)
 
-Если используете Terraform для управления инфраструктурой:
+If using Terraform for infrastructure management:
 
 ```hcl
 resource "github_branch_protection" "main" {
@@ -171,26 +171,25 @@ resource "github_branch_protection" "main" {
 }
 ```
 
-## Проверка настроек
+## Settings Verification
 
-После настройки проверьте:
+After setup, verify:
 
-1. Попробуйте создать PR в `main` без прохождения всех checks — должен быть заблокирован
-2. Попробуйте merge без approval — должен быть заблокирован
-3. Попробуйте force push в `main` — должен быть заблокирован
-4. Проверьте, что CODEOWNERS автоматически назначает ревьюеров
+1. Try to create PR to `main` without passing all checks — should be blocked
+2. Try to merge without approval — should be blocked
+3. Try to force push to `main` — should be blocked
+4. Verify that CODEOWNERS automatically assigns reviewers
 
-## Исключения
+## Exceptions
 
-В экстренных случаях (security incidents, critical production bugs) может потребоваться обход защиты веток. Для этого:
+In emergency cases (security incidents, critical production bugs) it may be necessary to bypass branch protection. For this:
 
-1. Создайте issue с описанием экстренной ситуации
-2. Получите approval от Security Lead и CTO
-3. Временно отключите защиту (только для конкретного инцидента)
-4. После исправления немедленно восстановите защиту
-5. Проведите post-mortem review
+1. Create an issue describing the emergency situation
+2. Get approval from Security Lead and CTO
+3. Temporarily disable protection (only for the specific incident)
+4. Immediately restore protection after fix
+5. Conduct post-mortem review
 
 ---
 
-**Важно**: Эти настройки критически важны для обеспечения безопасности и compliance финтех системы. Не отключайте их без крайней необходимости и соответствующего approval.
-
+**Important**: These settings are critical for ensuring security and compliance of the FinTech system. Do not disable them without extreme necessity and appropriate approval.

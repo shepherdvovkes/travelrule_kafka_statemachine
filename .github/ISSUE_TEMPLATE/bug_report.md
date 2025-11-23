@@ -1,58 +1,57 @@
 ---
 name: Bug Report
-about: Сообщить о баге в системе
+about: Report a bug in the system
 title: '[BUG] '
 labels: bug, needs-triage
 assignees: ''
 ---
 
-## Описание бага
-Краткое и понятное описание бага.
+## Bug Description
+Brief and clear description of the bug.
 
-## Шаги для воспроизведения
-1. Перейти к '...'
-2. Нажать на '...'
-3. Прокрутить до '...'
-4. Увидеть ошибку
+## Steps to Reproduce
+1. Go to '...'
+2. Click on '...'
+3. Scroll down to '...'
+4. See error
 
-## Ожидаемое поведение
-Четкое и краткое описание того, что вы ожидали увидеть.
+## Expected Behavior
+Clear and concise description of what you expected to see.
 
-## Фактическое поведение
-Четкое и краткое описание того, что произошло на самом деле.
+## Actual Behavior
+Clear and concise description of what actually happened.
 
-## Скриншоты
-Если применимо, добавьте скриншоты для объяснения проблемы.
+## Screenshots
+If applicable, add screenshots to help explain the problem.
 
-## Окружение
-- **Окружение**: [например, staging, production]
-- **Версия**: [например, 1.2.3]
-- **Браузер**: [если применимо, например, Chrome 120]
-- **OS**: [например, macOS 14.0]
+## Environment
+- **Environment**: [e.g., staging, production]
+- **Version**: [e.g., 1.2.3]
+- **Browser**: [if applicable, e.g., Chrome 120]
+- **OS**: [e.g., macOS 14.0]
 
-## Логи
+## Logs
 ```
-Вставьте релевантные логи здесь
+Insert relevant logs here
 ```
 
-## Дополнительная информация
-Любая другая информация о проблеме.
+## Additional Information
+Any other information about the problem.
 
 ## Security Impact
-<!-- Оцените влияние на безопасность -->
-- [ ] Нет влияния на безопасность
-- [ ] Низкое влияние (не критично)
-- [ ] Среднее влияние (требует внимания)
-- [ ] Высокое влияние (критично, требует немедленного внимания)
+<!-- Assess security impact -->
+- [ ] No security impact
+- [ ] Low impact (not critical)
+- [ ] Medium impact (requires attention)
+- [ ] High impact (critical, requires immediate attention)
 
 ## Compliance Impact
-<!-- Оцените влияние на compliance -->
-- [ ] Нет влияния на compliance
-- [ ] Низкое влияние
-- [ ] Среднее влияние
-- [ ] Высокое влияние (может нарушить Travel Rule, AML/KYC требования)
+<!-- Assess compliance impact -->
+- [ ] No compliance impact
+- [ ] Low impact
+- [ ] Medium impact
+- [ ] High impact (may violate Travel Rule, AML/KYC requirements)
 
 ---
 
-**Приоритет**: [P0/P1/P2/P3 - будет установлен командой]
-
+**Priority**: [P0/P1/P2/P3 - will be set by team]

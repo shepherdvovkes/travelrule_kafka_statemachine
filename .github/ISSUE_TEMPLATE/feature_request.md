@@ -1,44 +1,43 @@
 ---
 name: Feature Request
-about: Предложить новую функциональность
+about: Suggest a new feature
 title: '[FEATURE] '
 labels: enhancement, needs-triage
 assignees: ''
 ---
 
-## Описание функциональности
-Четкое и краткое описание того, что вы хотите добавить.
+## Feature Description
+Clear and concise description of what you want to add.
 
-## Проблема, которую это решает
-Четкое и краткое описание проблемы, которую решает эта функциональность.
+## Problem This Solves
+Clear and concise description of the problem this feature solves.
 
-## Предлагаемое решение
-Четкое и краткое описание того, что вы хотите, чтобы произошло.
+## Proposed Solution
+Clear and concise description of what you want to happen.
 
-## Альтернативные решения
-Четкое и краткое описание любых альтернативных решений или функциональностей, которые вы рассматривали.
+## Alternative Solutions
+Clear and concise description of any alternative solutions or features you have considered.
 
-## Влияние на Compliance
-<!-- Оцените влияние на compliance требования -->
-- [ ] Нет влияния на compliance
-- [ ] Требует обновления Travel Rule логики
-- [ ] Требует обновления AML/KYC логики
-- [ ] Требует обновления Policy Engine
-- [ ] Требует review от compliance команды
+## Compliance Impact
+<!-- Assess impact on compliance requirements -->
+- [ ] No compliance impact
+- [ ] Requires Travel Rule logic update
+- [ ] Requires AML/KYC logic update
+- [ ] Requires Policy Engine update
+- [ ] Requires review from compliance team
 
-## Влияние на Security
-<!-- Оцените влияние на безопасность -->
-- [ ] Нет влияния на безопасность
-- [ ] Требует security review
-- [ ] Требует дополнительных мер безопасности
+## Security Impact
+<!-- Assess impact on security -->
+- [ ] No security impact
+- [ ] Requires security review
+- [ ] Requires additional security measures
 
-## Примеры использования
-Если применимо, добавьте примеры использования или скриншоты.
+## Usage Examples
+If applicable, add usage examples or screenshots.
 
-## Дополнительная информация
-Любая другая информация или контекст о запросе функциональности.
+## Additional Information
+Any other information or context about the feature request.
 
 ---
 
-**Приоритет**: [P0/P1/P2/P3 - будет установлен командой]
-
+**Priority**: [P0/P1/P2/P3 - will be set by team]

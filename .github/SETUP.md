@@ -1,19 +1,19 @@
-# Настройка Remedy Development Environment
+# Remedy Development Environment Setup
 
-Этот документ описывает процесс настройки локального окружения для разработки Remedy с учетом всех требований финтех систем.
+This document describes the process of setting up a local environment for Remedy development, taking into account all FinTech system requirements.
 
-## Предварительные требования
+## Prerequisites
 
-### Обязательные инструменты
+### Required Tools
 
-1. **Node.js** (версия 20.x)
+1. **Node.js** (version 20.x)
    ```bash
-   # Использование nvm (рекомендуется)
+   # Using nvm (recommended)
    nvm install 20
    nvm use 20
    ```
 
-2. **PostgreSQL** (версия 15+)
+2. **PostgreSQL** (version 15+)
    ```bash
    # macOS
    brew install postgresql@15
@@ -22,19 +22,19 @@
    sudo apt-get install postgresql-15
    ```
 
-3. **Git** (версия 2.30+)
+3. **Git** (version 2.30+)
    ```bash
    git --version
    ```
 
-4. **Docker** (опционально, для локального тестирования)
+4. **Docker** (optional, for local testing)
    ```bash
    docker --version
    ```
 
-### Инструменты безопасности
+### Security Tools
 
-1. **Gitleaks** (для проверки секретов)
+1. **Gitleaks** (for secret checking)
    ```bash
    # macOS
    brew install gitleaks
@@ -45,87 +45,87 @@
    sudo mv gitleaks-linux-amd64 /usr/local/bin/gitleaks
    ```
 
-2. **Husky** (для Git hooks)
+2. **Husky** (for Git hooks)
    ```bash
    npm install -g husky
    ```
 
-## Настройка проекта
+## Project Setup
 
-### 1. Клонирование репозитория
+### 1. Clone Repository
 
 ```bash
 git clone https://github.com/remedy/remedy-backend.git
 cd remedy-backend
 ```
 
-### 2. Установка зависимостей
+### 2. Install Dependencies
 
 ```bash
 npm install
 ```
 
-### 3. Настройка переменных окружения
+### 3. Configure Environment Variables
 
 ```bash
-# Скопируйте пример файла
+# Copy example file
 cp .env.example .env
 
-# Отредактируйте .env и добавьте необходимые переменные
-# НИКОГДА не коммитьте реальные секреты в .env
+# Edit .env and add necessary variables
+# NEVER commit real secrets in .env
 ```
 
-**Важно**: Используйте только тестовые значения для локальной разработки. Реальные секреты должны храниться в AWS Secrets Manager.
+**Important**: Use only test values for local development. Real secrets must be stored in AWS Secrets Manager.
 
-### 4. Настройка базы данных
+### 4. Database Setup
 
 ```bash
-# Создайте базу данных
+# Create database
 createdb remedy_dev
 
-# Запустите миграции
+# Run migrations
 npm run migration:run
 ```
 
-### 5. Настройка Git Hooks
+### 5. Setup Git Hooks
 
 ```bash
-# Установите Husky hooks
+# Install Husky hooks
 npm run prepare
 
-# Проверьте, что hooks установлены
+# Verify hooks are installed
 ls -la .husky/
 ```
 
-### 6. Проверка настройки
+### 6. Verify Setup
 
 ```bash
-# Проверка линтинга
+# Linting check
 npm run lint
 
-# Проверка форматирования
+# Formatting check
 npm run format:check
 
-# Проверка типов
+# Type check
 npm run type-check
 
-# Запуск тестов
+# Run tests
 npm run test
 ```
 
-## Настройка IDE
+## IDE Setup
 
 ### VS Code
 
-Рекомендуемые расширения:
+Recommended extensions:
 
-1. **ESLint** - для линтинга
-2. **Prettier** - для форматирования
-3. **TypeScript and JavaScript Language Features** - для TypeScript
-4. **GitLens** - для работы с Git
-5. **SonarLint** - для анализа качества кода
+1. **ESLint** - for linting
+2. **Prettier** - for formatting
+3. **TypeScript and JavaScript Language Features** - for TypeScript
+4. **GitLens** - for Git work
+5. **SonarLint** - for code quality analysis
 
-Настройки VS Code (`.vscode/settings.json`):
+VS Code settings (`.vscode/settings.json`):
 
 ```json
 {
@@ -146,50 +146,50 @@ npm run test
 }
 ```
 
-## Рабочий процесс разработки
+## Development Workflow
 
-### 1. Создание новой ветки
+### 1. Create New Branch
 
 ```bash
-# Создайте feature ветку
+# Create feature branch
 git checkout -b feature/travel-rule-validation
 
-# Или fix ветку
+# Or fix branch
 git checkout -b fix/payment-timeout
 ```
 
-### 2. Разработка
+### 2. Development
 
-- Следуйте CODE_GUIDE.md
-- Пишите тесты параллельно с кодом
-- Коммитьте часто с понятными сообщениями
+- Follow CODE_GUIDE.md
+- Write tests in parallel with code
+- Commit frequently with clear messages
 
-### 3. Перед коммитом
+### 3. Before Commit
 
-Pre-commit hooks автоматически проверят:
-- Линтинг
-- Форматирование
-- Типы TypeScript
-- Тесты
-- Секреты в коде
+Pre-commit hooks will automatically check:
+- Linting
+- Formatting
+- TypeScript types
+- Tests
+- Secrets in code
 
-Если проверки не пройдут, коммит будет заблокирован.
+If checks fail, commit will be blocked.
 
-### 4. Создание Pull Request
+### 4. Create Pull Request
 
-1. Запушьте ветку:
+1. Push branch:
    ```bash
    git push origin feature/travel-rule-validation
    ```
 
-2. Создайте PR через GitHub UI
-3. Заполните PR template
-4. Дождитесь прохождения CI/CD checks
-5. Получите approval от ревьюеров
+2. Create PR via GitHub UI
+3. Fill PR template
+4. Wait for CI/CD checks to pass
+5. Get approval from reviewers
 
-### 5. После merge
+### 5. After Merge
 
-- Удалите локальную ветку:
+- Delete local branch:
   ```bash
   git checkout main
   git pull
@@ -198,100 +198,99 @@ Pre-commit hooks автоматически проверят:
 
 ## Troubleshooting
 
-### Проблема: Pre-commit hooks не работают
+### Issue: Pre-commit hooks not working
 
 ```bash
-# Переустановите Husky
+# Reinstall Husky
 rm -rf .husky
 npm run prepare
 chmod +x .husky/pre-commit
 chmod +x .husky/commit-msg
 ```
 
-### Проблема: ESLint ошибки
+### Issue: ESLint errors
 
 ```bash
-# Автоматически исправить большинство ошибок
+# Automatically fix most errors
 npm run lint
 ```
 
-### Проблема: TypeScript ошибки
+### Issue: TypeScript errors
 
 ```bash
-# Проверьте типы
+# Check types
 npm run type-check
 ```
 
-### Проблема: Тесты не проходят
+### Issue: Tests failing
 
 ```bash
-# Запустите тесты с подробным выводом
+# Run tests with verbose output
 npm run test -- --verbose
 
-# Запустите конкретный тест
+# Run specific test
 npm run test -- travel-rule.spec.ts
 ```
 
-### Проблема: База данных не подключается
+### Issue: Database not connecting
 
-1. Проверьте, что PostgreSQL запущен:
+1. Check that PostgreSQL is running:
    ```bash
    pg_isready
    ```
 
-2. Проверьте переменные окружения в `.env`:
+2. Check environment variables in `.env`:
    ```bash
    DATABASE_URL=postgresql://user:password@localhost:5432/remedy_dev
    ```
 
-3. Проверьте права доступа к базе данных
+3. Check database access rights
 
-## Полезные команды
+## Useful Commands
 
 ```bash
-# Разработка
-npm run start:dev          # Запуск в режиме разработки
-npm run start:debug        # Запуск с отладкой
+# Development
+npm run start:dev          # Run in development mode
+npm run start:debug        # Run with debugging
 
-# Тестирование
-npm run test               # Все тесты
-npm run test:unit          # Только unit тесты
-npm run test:integration   # Только integration тесты
-npm run test:e2e           # E2E тесты
-npm run test:cov           # С покрытием
+# Testing
+npm run test               # All tests
+npm run test:unit          # Unit tests only
+npm run test:integration  # Integration tests only
+npm run test:e2e           # E2E tests
+npm run test:cov           # With coverage
 
-# Качество кода
-npm run lint               # Линтинг с автофиксом
-npm run lint:check         # Линтинг без автофикса
-npm run format             # Форматирование
-npm run format:check       # Проверка форматирования
-npm run type-check         # Проверка типов
+# Code Quality
+npm run lint               # Linting with autofix
+npm run lint:check         # Linting without autofix
+npm run format             # Formatting
+npm run format:check       # Formatting check
+npm run type-check         # Type check
 
-# База данных
-npm run migration:generate # Генерация миграции
-npm run migration:run      # Применение миграций
-npm run migration:revert   # Откат миграции
+# Database
+npm run migration:generate # Generate migration
+npm run migration:run      # Apply migrations
+npm run migration:revert   # Revert migration
 
-# Билд
-npm run build              # Сборка проекта
+# Build
+npm run build              # Build project
 ```
 
-## Дополнительные ресурсы
+## Additional Resources
 
-- [CODE_GUIDE.md](../CODE_GUIDE.md) - Полное руководство по коду
-- [BRANCH_PROTECTION.md](./BRANCH_PROTECTION.md) - Правила защиты веток
-- [PULL_REQUEST_TEMPLATE.md](./PULL_REQUEST_TEMPLATE.md) - Шаблон PR
+- [CODE_GUIDE.md](../CODE_GUIDE.md) - Complete code guide
+- [BRANCH_PROTECTION.md](./BRANCH_PROTECTION.md) - Branch protection rules
+- [PULL_REQUEST_TEMPLATE.md](./PULL_REQUEST_TEMPLATE.md) - PR template
 
-## Поддержка
+## Support
 
-Если у вас возникли проблемы с настройкой:
+If you encounter setup issues:
 
-1. Проверьте [CODE_GUIDE.md](../CODE_GUIDE.md)
-2. Проверьте issues на GitHub
-3. Обратитесь в #dev-support в Slack
-4. Создайте issue с описанием проблемы
+1. Check [CODE_GUIDE.md](../CODE_GUIDE.md)
+2. Check issues on GitHub
+3. Contact #dev-support in Slack
+4. Create an issue with problem description
 
 ---
 
-**Важно**: Все разработчики должны пройти security training перед началом работы с кодом.
-
+**Important**: All developers must complete security training before starting work with code.

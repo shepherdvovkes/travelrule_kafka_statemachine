@@ -1,25 +1,25 @@
 ---
 name: Security Issue
-about: Сообщить о проблеме безопасности
+about: Report a security problem
 title: '[SECURITY] '
 labels: security, needs-triage
 assignees: 'remedy-security-team'
 ---
 
-##  ВАЖНО: Security Issues
+## IMPORTANT: Security Issues
 
-**НЕ создавайте публичные issues для security проблем!**
+**DO NOT create public issues for security problems!**
 
-Вместо этого отправьте email на: **security@remedy.finance**
+Instead, send an email to: **security@remedy.finance**
 
-Или используйте GitHub Security Advisories: https://github.com/remedy/remedy-backend/security/advisories/new
+Or use GitHub Security Advisories: https://github.com/remedy/remedy-backend/security/advisories/new
 
 ---
 
-## Описание проблемы безопасности
-Краткое описание проблемы безопасности.
+## Security Problem Description
+Brief description of the security problem.
 
-## Тип уязвимости
+## Vulnerability Type
 - [ ] SQL Injection
 - [ ] XSS (Cross-Site Scripting)
 - [ ] CSRF (Cross-Site Request Forgery)
@@ -29,29 +29,28 @@ assignees: 'remedy-security-team'
 - [ ] Security misconfiguration
 - [ ] Insecure dependencies
 - [ ] Insufficient logging/monitoring
-- [ ] Другое (опишите)
+- [ ] Other (describe)
 
-## Уровень критичности
-- [ ] Critical (P0) - требует немедленного внимания
-- [ ] High (P1) - требует быстрого исправления
-- [ ] Medium (P2) - требует исправления в ближайшее время
-- [ ] Low (P3) - требует исправления в плановом порядке
+## Criticality Level
+- [ ] Critical (P0) - requires immediate attention
+- [ ] High (P1) - requires quick fix
+- [ ] Medium (P2) - requires fix in near future
+- [ ] Low (P3) - requires fix in planned order
 
-## Шаги для воспроизведения
+## Steps to Reproduce
 1. ...
 2. ...
 3. ...
 
-## Потенциальное воздействие
-Опишите потенциальное воздействие на систему, пользователей, данные.
+## Potential Impact
+Describe potential impact on system, users, data.
 
-## Рекомендации по исправлению
-Если у вас есть идеи по исправлению, опишите их здесь.
+## Fix Recommendations
+If you have ideas for fixes, describe them here.
 
-## Дополнительная информация
-Любая другая релевантная информация.
+## Additional Information
+Any other relevant information.
 
 ---
 
-**Этот issue будет обработан командой безопасности в приоритетном порядке.**
-
+**This issue will be processed by the security team on a priority basis.**
